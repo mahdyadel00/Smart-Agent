@@ -1,0 +1,7 @@
+.single-branch-info ul li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
