@@ -60,7 +60,7 @@ $images = \App\Bll\Utility::get_default_images();
 
 
                                         <div class="text-center">
-                                            <img src="{{asset('images/dd.png')}}" alt="logo.png"
+                                            <img src="{{asset('victor/logo.png')}}" alt="logo.png"
                                                 style="max-width: 200px; max-height: 200px">
                                         </div>
                                         <div class="text-center " style="padding-top:20px">

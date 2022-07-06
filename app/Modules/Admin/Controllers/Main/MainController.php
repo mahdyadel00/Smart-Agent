@@ -1,40 +1,41 @@
 <?php
 
-namespace App\Modules\Admin\Controllers\ActivityModules;
+namespace App\Modules\Admin\Controllers\Main;
 
 use App\Bll\Lang;
 use App\Http\Controllers\Controller;
 use App\Models\Language;
-use App\Modules\Admin\Models\ActivityModule\ActivityModule;
-use App\Modules\Admin\Models\ActivityModule\ActivityModuleData;
+use App\Modules\Admin\Models\Main\Main;
+use App\Modules\Admin\Models\Main\MainData;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
-class ActivityModulesController extends Controller
+class MainController extends Controller
 {
 
     protected function index()
     {
-        $avtivity_module = ActivityModule::with([
-            'data' => function($query){
+        $main = Main::with([
+            'Data' => function($query){
 
                 $query->where('lang_id' , Lang::getSelectedLangId());
             },
             ])->get();
         if (request()->ajax()) {
-            return DataTables::of($avtivity_module)
+            return DataTables::of($main)
                 ->editColumn('options', function ($query) {
                     $html = '';
-                    if (Auth::user()->hasPermissionTo('Update_activity_modules')) {
+                    if (Auth::user()->hasPermissionTo('Update_main')) {
 
-                        $html .= "<a href='" . route('activity_modules.edit', $query->id) . "' class='btn waves-effect waves-light btn-success text-center edit-row mr-1 ml-1' data-id='" . $query->id . "'  data-title='" . $query->title . "'  data-description='" . $query->description . "' data-url='" . route('activity_modules.edit', $query->id) . "'>" . _i('Edit') . "</a>";
+                        $html = "<a href='#' class='btn waves-effect waves-light btn-success text-center edit-row mr-1 ml-1' data-toggle='modal' data-target='#default-Modal' data-id='".$query->id."' data-url='".route('main_page.edit', $query->id)."'>"._i('Edit')."</a>";
                     }
-                    if (Auth::user()->hasPermissionTo('Delete_activity_modules')) {
+                    if (Auth::user()->hasPermissionTo('Delete_main')) {
 
-                        $html .= "<a href='" . route('activity_modules.delete', $query->id) . "' class='btn btn-danger btn-delete datatable-delete mr-1 ml-1' data-id='" . $query->id . "'>" . _i('Delete') . "</a>";
+                        $html .= "<a href='#' class='btn btn-danger btn-delete datatable-delete mr-1 ml-1' data-id='".$query->id."' data-url='".route('main_page.delete', $query->id)."'>"._i('Delete')."</a>";
                     }
-                    if (Auth::user()->hasPermissionTo('Lang_activity_modules')) {
+                    if (Auth::user()->hasPermissionTo('Lang_main')) {
 
                         $langs = Language::get();
                         $options = '';
@@ -54,34 +55,27 @@ class ActivityModulesController extends Controller
                     }
 
                     return $html;
-          
-             })->editColumn('title', function ($query) {
-                
-                $data = $query->data->where('lang_id', Lang::getSelectedLangId())->first();
-                if ($data != null) {
 
-                    return $data->title;
-                } else {
-                    $data = $query->data->first();
-                    return $data->title;
-                }         
+             })->editColumn('title', function ($query) {
+
+                $title = $query->Data->title ;
+                    return $title;
+
             })->editColumn('image', function($query) {
                 $image = asset(rawurlencode($query->image));
                 $html = "<img class='img-thumbnail' width=100 height=100 src=".$query->getImageNameEncoded().">";
                 return $html;
-            })->editColumn('status', function($query) {
-                return $query->status == 1 ? _i('Published') : _i('Not Published');
 
             })->rawColumns([
                     'options',
-                    'title',
                     'image',
+                    'title',
                     'created_at',
                 ])
                 ->make(true);
         }
 
-        return view('admin.avtivity_module.index');
+        return view('admin.main.index');
     }//End of Index
 
     /**
@@ -95,20 +89,10 @@ class ActivityModulesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected function create()
-    {
-        $languages = Language::get();
-        return view('admin.avtivity_module.create', compact('languages'));
-    }// End of Create
 
     protected function store(Request $request)
     {
-        if($request->status) {
-           
-            $request->status = 1;
-        } else {
-            $request->status = 0;
-        }
+
         $image_in_db = NULL;
         if( $request->has('image') )
         {
@@ -116,70 +100,71 @@ class ActivityModulesController extends Controller
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp',
             ]);
 
-            $path = public_path().'/uploads/avtivity_module';
+            $path = public_path().'/uploads/main';
             $image = request('image');
             $image_name = time().request('image')->getClientOriginalName();
             $image->move($path , $image_name);
-            $image_in_db = '/uploads/avtivity_module/'.$image_name;
+            $image_in_db = '/uploads/main/'.$image_name;
         }
-        $avtivity_module = ActivityModule::create([
+        $main = Main::create([
             'image' => $image_in_db,
-            'status' => $request->status,
+
         ]);
-        
-        $avtivity_module_data = ActivityModuleData::create([
-            'activity_id' => $avtivity_module->id,
+
+        $main_data = MainData::create([
+            'main_id' => $main->id,
             'title' => $request->title,
             'description' => $request->description,
-            'lang_id' => $request->lang_id,
+            'lang_id' =>  Lang::getSelectedLangId(),
         ]);
 
-        $avtivity_module->save();
+        $main->save();
 
-        return redirect()->route('activity_modules.index')->with('flash_message', _i('Added Successfully !'));
-        
+        return response()->json('success');
     }
 
     protected function edit($id)
     {
-        $avtivity_module = ActivityModule::findOrFail($id);
-        $avtivity_module_data = ActivityModuleData::where('activity_id', $avtivity_module->id)->where('lang_id', Lang::getSelectedLangId())->first();
-        return view('admin.avtivity_module.edit', compact('avtivity_module', 'avtivity_module_data'));
+        $main = Main::findOrFail($id);
+        $main->image = asset($main->image);
+        return $main;
     }//End of Edit
 
-    protected function update(Request $request, $id)
+    protected function update(Request $request)
     {
-        
-        $avtivity_module = ActivityModule::where("id", $id)->first();
+        $main = Main::where('id' , $request->id)->first();
 
-        if ($request->has('status')) {
-
-            $avtivity_module->status = $request->status;
+        if(! $request->image) {
+            $image_in_db = $main->image;
         } else {
-            
-            $avtivity_module->status = 0;
+            $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp',
+            ]);
+
+            $image_path = public_path($main->image);
+            if (file_exists(public_path($main->image))) {
+                unlink($image_path);
+            }
+            $path = public_path().'/uploads/main';
+            $image = request('image');
+            $image_name = time().request('image')->getClientOriginalName();
+            $image->move($path , $image_name);
+            $image_in_db = '/uploads/main/'.$image_name;
         }
+        Main::where('id' , $request->id)->update([
+            'image'	=> $image_in_db,
+        ]);
 
-        $avtivity_module_data = ActivityModuleData::where('quiz_id', $avtivity_module->id)->first();
-       
-        // dd($request->answer);
-        if ($request->has('answer')) {
 
-            $avtivity_module_data->answer = $request->answer == 1;
-        } else {
-            $avtivity_module_data->answer = 0;
-        }       
+        $main->save();
 
-        $avtivity_module->save();
-        $avtivity_module_data->save();
-
-        return redirect()->back()->with('flash_message', _i('Updated Successfully !'));
+        return response()->json('success');
     }//End of Update
 
     public function getTranslation(Request $request)
     {
-        $rowData = QuestionData::where('ads_id', $request->transRow)
-            ->where('lang_id', $request->lang_id)
+        $rowData = MainData::where('ads_id', $request->transRow)
+            ->where('main_id', $request->main_id)
             ->first(['title', 'image']);
         if (!empty($rowData)) {
             $rowData->image = asset($rowData->image);
@@ -191,8 +176,8 @@ class ActivityModulesController extends Controller
 
     public function storeTranslation(Request $request)
     {
-        $ads_data = QuestionData::query()
-            ->where('lang_id', $request->lang_id)
+        $ads_data = MainData::query()
+            ->where('main_id', $request->main_id)
             ->where('ads_id', $request->id)
             ->first();
         // dd($ads_data);
@@ -200,11 +185,11 @@ class ActivityModulesController extends Controller
             $request->validate([
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp',
             ]);
-            $path = public_path() . '/uploads/advrtisment';
+            $path = public_path() . '/uploads/main';
             $image = request('image');
             $image_name = time() . request('image')->getClientOriginalName();
             $image->move($path, $image_name);
-            $image_in_db = '/uploads/advrtisment/' . $image_name;
+            $image_in_db = '/uploads/main/' . $image_name;
         } else {
             $image_in_db = null;
         }
@@ -219,8 +204,8 @@ class ActivityModulesController extends Controller
                     unlink($image_path);
                 }
             }
-            QuestionData::where([
-                'ads_id' => $request->id,
+            MainData::where([
+                'main_id' => $request->id,
                 'lang_id' => $request->lang_id,
             ])->update([
                 'title' => $request->title,
@@ -228,10 +213,10 @@ class ActivityModulesController extends Controller
             ]);
         } else {
 
-            QuestionData::create([
+            MainData::create([
                 'title' => $request->title,
                 'image' => $image_in_db,
-                'ads_id' => $request->id,
+                'main_id' => $request->id,
                 'lang_id' => $request->lang_id
             ]);
         }
@@ -241,9 +226,15 @@ class ActivityModulesController extends Controller
 
     public function delete($id)
     {
-        $avtivity_module = ActivityModule::where('id', $id)->first();
-        $avtivity_module->delete();
-        $avtivity_module_data = ActivityModuleData::where('avtivity_module', $id)->delete();
-        return redirect()->back()->with('flash_message', _i('Deleted Successfully !'));
+        $main = Main::where('id', $id)->first();
+        $get_image_name = $main->image;
+        $image_path = public_path($get_image_name);
+        if(File::exists($image_path)) {
+            File::delete($image_path);
+        }
+
+        $main->delete();
+        MainData::where('main_id' , $id)->delete();
+        return response()->json('success');
     }
 }

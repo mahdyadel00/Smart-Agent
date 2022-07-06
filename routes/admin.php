@@ -21,10 +21,14 @@ use App\Modules\Admin\Controllers\Questions\QuestiontController;
 use App\Modules\Admin\Controllers\QuizModule\QuizeModuleController;
 use App\Modules\Admin\Controllers\ActivityModules\ActivityModulesController;
 use App\Modules\Admin\Controllers\Login\LoginController;
+use App\Modules\Admin\Controllers\Main\MainController;
+use App\Modules\Admin\Controllers\Main\MainGoalsController;
+use App\Modules\Admin\Controllers\Main\MainInsturcationController;
+use App\Modules\Admin\Controllers\Help\HelpController;
 
 Route::prefix('admin')->group(function () {
     Route::get('/lang/{locale?}', [DashboardController::class, 'changeLang']);
-    Route::get('login', [AdminLoginController::class, 'login'])->name('admin.login');
+    Route::get('login-show', [AdminLoginController::class, 'login'])->name('admin.login');
     Route::post('login', [AdminLoginController::class, 'doLogin'])->name('admin.do.login');
 
     Route::group(['middleware' => ['auth:admin']], function () {
@@ -88,8 +92,8 @@ Route::prefix('admin')->group(function () {
         Route::get('settings/sliders/get/lang/value', [SliderController::class, 'getLangValue']);
         Route::post('settings/sliders/lang/store', [SliderController::class, 'storelangTranslation']);
         Route::delete('settings/sliders/{id}', [SliderController::class, 'delete'])->name('admin_slider.destroy');
-        
-    
+
+
         //Questions
         Route::get('questions', [QuestiontController::class, 'index'])->name('questions.index');
         Route::get('questions/create', [QuestiontController::class, 'create'])->name('questions.create');
@@ -119,6 +123,45 @@ Route::prefix('admin')->group(function () {
         Route::get('login/get_translation', [LoginController::class, 'getTranslation'])->name('login.get.translation');
         Route::post('login/store_translation', [LoginController::class, 'storeTranslation'])->name('login.store.translation');
         Route::get('login/{delete}', [LoginController::class, 'delete'])->name('login.delete');
+        //Main Page
+        Route::get('main_page', [MainController::class, 'index'])->name('main_page.index');
+        Route::get('main_page/create', [MainController::class, 'create'])->name('main_page.create');
+        Route::post('main_page/store', [MainController::class, 'store'])->name('main_page.store');
+        Route::get('main_page/{main}/edit', [MainController::class, 'edit'])->name('main_page.edit');
+        Route::post('main_page/update', [MainController::class, 'update'])->name('main_page.update');
+        Route::get('main_page/get_translation', [MainController::class, 'getTranslation'])->name('main_page.get.translation');
+        Route::post('main_page/store_translation', [MainController::class, 'storeTranslation'])->name('main_page.store.translation');
+        Route::get('main_page/{delete}', [MainController::class, 'delete'])->name('main_page.delete');
+
+        //Main Goals
+        Route::get('main_goals', [MainGoalsController::class, 'index'])->name('main_goals.index');
+        Route::get('main_goals/create', [MainGoalsController::class, 'create'])->name('main_goals.create');
+        Route::post('main_goals/store', [MainGoalsController::class, 'store'])->name('main_goals.store');
+        Route::get('main_goals/{main}/edit', [MainGoalsController::class, 'edit'])->name('main_goals.edit');
+        Route::post('main_goals/update', [MainGoalsController::class, 'update'])->name('main_goals.update');
+        Route::get('main_goals/get_translation', [MainGoalsController::class, 'getTranslation'])->name('main_goals.get.translation');
+        Route::post('main_goals/store_translation', [MainGoalsController::class, 'storeTranslation'])->name('main_goals.store.translation');
+        Route::get('main_goals/{delete}', [MainGoalsController::class, 'delete'])->name('main_goals.delete');
+
+        //Main Insturcation
+        Route::get('main_insturcation', [MainInsturcationController::class, 'index'])->name('main_insturcation.index');
+        Route::get('main_insturcation/create', [MainInsturcationController::class, 'create'])->name('main_insturcation.create');
+        Route::post('main_insturcation/store', [MainInsturcationController::class, 'store'])->name('main_insturcation.store');
+        Route::get('main_insturcation/{main}/edit', [MainInsturcationController::class, 'edit'])->name('main_insturcation.edit');
+        Route::post('main_insturcation/update', [MainInsturcationController::class, 'update'])->name('main_insturcation.update');
+        Route::get('main_insturcation/get_translation', [MainInsturcationController::class, 'getTranslation'])->name('main_insturcation.get.translation');
+        Route::post('main_insturcation/store_translation', [MainInsturcationController::class, 'storeTranslation'])->name('main_insturcation.store.translation');
+        Route::get('main_insturcation/{delete}', [MainInsturcationController::class, 'delete'])->name('main_insturcation.delete');
+
+        //Help
+        Route::get('help', [HelpController::class, 'index'])->name('help.index');
+        Route::get('help/create', [HelpController::class, 'create'])->name('help.create');
+        Route::post('help/store', [HelpController::class, 'store'])->name('help.store');
+        Route::get('help/{main}/edit', [HelpController::class, 'edit'])->name('help.edit');
+        Route::post('help/{id}/update', [HelpController::class, 'update'])->name('help.update');
+        Route::get('help/get_translation', [HelpController::class, 'getTranslation'])->name('help.get.translation');
+        Route::post('help/store_translation', [HelpController::class, 'storeTranslation'])->name('help.store.translation');
+        Route::get('help/{delete}', [HelpController::class, 'delete'])->name('help.delete');
 
         //Pages
         Route::get('pages', [PagesController::class, 'index'])->name('pages.index')->middleware(['permission:Pages']);

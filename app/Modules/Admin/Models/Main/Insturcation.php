@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Modules\Admin\Models\Insturctions;
+namespace App\Modules\Admin\Models\Main;
 
 use App\Bll\Lang;
 use Illuminate\Database\Eloquent\Model;
-use App\Modules\Admin\Models\Insturctions\InsturctionData;
+use App\Modules\Admin\Models\Main\InsturcationData;
 
-class Insturction extends Model
+class Insturcation extends Model
 {
     protected $table = 'main_insturcation';
     protected $guarded = [];
 
     public function Data(){
-        return $this->hasOne(InsturctionData::class,'main_insturcation_id','id');
+        return $this->hasOne(InsturcationData::class,'main_insturcation_id','id');
     }
 
     public function TranslatedData(){
-        return $this->hasOne(InsturctionData::class,'main_insturcation_id','id')->where('lang_id',Lang::getSelectedLangId());
+        return $this->hasOne(InsturcationData::class,'main_insturcation_id','id')->where('lang_id',Lang::getSelectedLangId());
     }
     public function getImageNameEncoded(){
         return dirname($this->image).'/'.rawurlencode(basename($this->image));

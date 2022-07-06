@@ -1,42 +1,42 @@
 <?php
 
-namespace App\Modules\Admin\Controllers\Instructions;
+namespace App\Modules\Admin\Controllers\Main;
 
 use App\Bll\Lang;
 use App\Http\Controllers\Controller;
 use App\Models\Language;
 use App\Modules\Admin\Models\Insturctions\Insturction;
-use App\Modules\Admin\Models\Insturctions\InsturctionData;
+use App\Modules\Admin\Models\Main\Insturcation;
+use App\Modules\Admin\Models\Main\InsturcationData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
-class InstructionsController extends Controller
+class MainInsturcationController extends Controller
 {
 
     protected function index()
     {
-
-        $insturctions = Insturction::with([
+        $main = Insturcation::with([
             'Data' => function($query){
 
                 $query->where('lang_id' , Lang::getSelectedLangId());
             },
             ])->get();
         if (request()->ajax()) {
-            return DataTables::of($insturctions)
+            return DataTables::of($main)
                 ->editColumn('options', function ($query) {
                     $html = '';
-                    if (Auth::user()->hasPermissionTo('Update_insturctions')) {
+                    // if (Auth::user()->hasPermissionTo('Update_main_insturcation')) {
 
-                        $html = "<a href='#' class='btn waves-effect waves-light btn-success text-center edit-row mr-1 ml-1' data-toggle='modal' data-target='#default-Modal' data-id='".$query->id."' data-url='".route('insturctions.edit', $query->id)."'>"._i('Edit')."</a>";
-                    }
-                    if (Auth::user()->hasPermissionTo('Delete_insturctions')) {
+                        $html = "<a href='#' class='btn waves-effect waves-light btn-success text-center edit-row mr-1 ml-1' data-toggle='modal' data-target='#default-Modal' data-id='".$query->id."' data-url='".route('main_insturcation.edit', $query->id)."'>"._i('Edit')."</a>";
+                    // }
+                    // if (Auth::user()->hasPermissionTo('Delete_main_insturcation')) {
 
-                        $html .= "<a href='#' class='btn btn-danger btn-delete datatable-delete mr-1 ml-1' data-id='".$query->id."' data-url='".route('insturctions.delete', $query->id)."'>"._i('Delete')."</a>";
-                    }
-                    if (Auth::user()->hasPermissionTo('Lang_insturctions')) {
+                        $html .= "<a href='#' class='btn btn-danger btn-delete datatable-delete mr-1 ml-1' data-id='".$query->id."' data-url='".route('main_insturcation.delete', $query->id)."'>"._i('Delete')."</a>";
+                    // }
+                    // if (Auth::user()->hasPermissionTo('Lang_main_insturcation')) {
 
                         $langs = Language::get();
                         $options = '';
@@ -53,32 +53,20 @@ class InstructionsController extends Controller
                         // ' . $options . '
                         // </ul>
                         // </div> ';
-                    }
+                    // }
 
                     return $html;
-          
+
              })->editColumn('title', function ($query) {
-                
-                $data = $query->Data->where('lang_id', Lang::getSelectedLangId())->first();
-                if ($data != null) {
-                    
-                    
-                    return $data->title;
-                } else {
-                    $data = $query->Data->first();
-                    return $data->title;
-                }         
+
+                $title = $query->Data->title ;
+                    return $title;
+
             })->editColumn('image', function($query) {
                 $image = asset(rawurlencode($query->image));
                 $html = "<img class='img-thumbnail' width=100 height=100 src=".$query->getImageNameEncoded().">";
                 return $html;
 
-            })->editColumn('status', function($query) {
-                    if ($query->status == 0){
-                        return '<div class="badge badge-warning">'. _i('Disabled') .'</div>';
-                    }else {
-                        return '<div class="badge badge-info">'. _i('Enabled') .'</div>';
-                    }
             })->rawColumns([
                     'options',
                     'image',
@@ -88,7 +76,7 @@ class InstructionsController extends Controller
                 ->make(true);
         }
 
-        return view('admin.insturctions.index');
+        return view('admin.main_insturcation.index');
     }//End of Index
 
     /**
@@ -102,15 +90,10 @@ class InstructionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-   
+
     protected function store(Request $request)
     {
-        if($request->status) {
-            $request->status = 1;
-        } else {
-            $request->status = 0;
-        }
-        
+        // dd($request->all());
         $image_in_db = NULL;
         if( $request->has('image') )
         {
@@ -118,85 +101,71 @@ class InstructionsController extends Controller
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp',
             ]);
 
-            $path = public_path().'/uploads/insturctions';
+            $path = public_path().'/uploads/main_insturcation';
             $image = request('image');
             $image_name = time().request('image')->getClientOriginalName();
             $image->move($path , $image_name);
-            $image_in_db = '/uploads/insturctions/'.$image_name;
+            $image_in_db = '/uploads/main_insturcation/'.$image_name;
         }
-        $insturctions = Insturction::create([
+        $main = Insturction::create([
             'image' => $image_in_db,
-            'status' => $request->status,
-           
+
         ]);
-        
-        $insturction_data = InsturctionData::create([
-            'insturction_id' => $insturctions->id,
+
+        $main_data = InsturcationData::create([
+            'main_insturcation_id' => $main->id,
             'title' => $request->title,
-            'body' => $request->body,
+            'description' => $request->description,
             'lang_id' =>  Lang::getSelectedLangId(),
         ]);
 
-        $insturctions->save();
+        $main->save();
 
-        return response()->json('success');        
+        return response()->json('success');
     }
 
     protected function edit($id)
     {
-        $insturction = Insturction::findOrFail($id);
-        $insturction->image = asset($insturction->image);
-        return $insturction;
+        $main = Insturction::findOrFail($id);
+        $main->image = asset($main->image);
+        return $main;
     }//End of Edit
 
     protected function update(Request $request)
     {
-       
-        if($request->status) {
-            $request->status = 1;
-        } else {
-            $request->status = 0;
-        }   
-        $insturction = Insturction::where('id' , $request->id)->first();
-        if ($request->has('status')) {
-
-            $insturction->status = $request->status;
-        } else {
-            
-            $insturction->status = 0;
-        }
+        $main = Insturction::where('id' , $request->id)->first();
 
         if(! $request->image) {
-            $image_in_db = $insturction->image;
+            $image_in_db = $main->image;
         } else {
             $request->validate([
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp',
             ]);
 
-            $image_path = public_path($insturction->image);
-            if (file_exists(public_path($insturction->image))) {
+            $image_path = public_path($main->image);
+            if (file_exists(public_path($main->image))) {
                 unlink($image_path);
             }
-            $path = public_path().'/uploads/insturctions';
+            $path = public_path().'/uploads/main_insturcation';
             $image = request('image');
             $image_name = time().request('image')->getClientOriginalName();
             $image->move($path , $image_name);
-            $image_in_db = '/uploads/insturctions/'.$image_name;
+            $image_in_db = '/uploads/main_insturcation/'.$image_name;
         }
         Insturction::where('id' , $request->id)->update([
             'image'	=> $image_in_db,
         ]);
 
-    
-        $insturction->save();
 
-        return response()->json('success');        
+        $main->save();
+
+        return response()->json('success');
     }//End of Update
 
     public function getTranslation(Request $request)
     {
-        $rowData = QuestionData::where('ads_id', $request->transRow)
-            ->where('lang_id', $request->lang_id)
+        $rowData = InsturcationData::where('ads_id', $request->transRow)
+            ->where('main_insturcation_id', $request->main_id)
             ->first(['title', 'image']);
         if (!empty($rowData)) {
             $rowData->image = asset($rowData->image);
@@ -208,20 +177,19 @@ class InstructionsController extends Controller
 
     public function storeTranslation(Request $request)
     {
-        $ads_data = QuestionData::query()
-            ->where('lang_id', $request->lang_id)
+        $ads_data = InsturcationData::query()
+            ->where('main_insturcation_id', $request->main_id)
             ->where('ads_id', $request->id)
             ->first();
-        // dd($ads_data);
         if ($request->image) {
             $request->validate([
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp',
             ]);
-            $path = public_path() . '/uploads/advrtisment';
+            $path = public_path() . '/uploads/main_insturcation';
             $image = request('image');
             $image_name = time() . request('image')->getClientOriginalName();
             $image->move($path, $image_name);
-            $image_in_db = '/uploads/advrtisment/' . $image_name;
+            $image_in_db = '/uploads/main_insturcation/' . $image_name;
         } else {
             $image_in_db = null;
         }
@@ -236,8 +204,8 @@ class InstructionsController extends Controller
                     unlink($image_path);
                 }
             }
-            QuestionData::where([
-                'ads_id' => $request->id,
+            InsturcationData::where([
+                'main_id' => $request->id,
                 'lang_id' => $request->lang_id,
             ])->update([
                 'title' => $request->title,
@@ -245,10 +213,10 @@ class InstructionsController extends Controller
             ]);
         } else {
 
-            QuestionData::create([
+            InsturcationData::create([
                 'title' => $request->title,
                 'image' => $image_in_db,
-                'ads_id' => $request->id,
+                'main_id' => $request->id,
                 'lang_id' => $request->lang_id
             ]);
         }
@@ -258,15 +226,15 @@ class InstructionsController extends Controller
 
     public function delete($id)
     {
-        $insturction = Insturction::where('id', $id)->first();
-        $get_image_name = $insturction->image;
+        $main = Insturction::findOrfail($id);
+        $get_image_name = $main->image;
         $image_path = public_path($get_image_name);
         if(File::exists($image_path)) {
             File::delete($image_path);
         }
-        
-        $insturction->delete();
-        InsturctionData::where('insturction_id' , $id)->delete();
+
+        $main->delete();
+        InsturcationData::where('main_insturcation_id' , $id)->delete();
         return response()->json('success');
     }
 }

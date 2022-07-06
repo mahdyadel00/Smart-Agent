@@ -74,7 +74,15 @@
                                 <input type="text" name="phone" id="phone" class="form-control"
                                     value="{{ $contact->phone }}" disabled>
                             </div>
-                        </div>                       
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label " for="txtUser">
+                                <?= _i('Subject') ?> </label>
+                            <div class="col-md-6">
+                                <input type="text" name="subject" id="subject" class="form-control"
+                                    value="{{ $contact->subject }}" disabled>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label class="col-md-2 control-label " for="txtUser">
                                 <?= _i('Message') ?> </label>

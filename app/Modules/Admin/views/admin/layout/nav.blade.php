@@ -33,7 +33,7 @@
                     </a>
                 </li>
             @endif
-         
+
             @can('Security')
                 <li class="pcoded-hasmenu">
                     <a href="javascript:void(0)"><i class="fa fa-circle-o"></i>
@@ -85,9 +85,9 @@
             @endcan
 
 
-      
+
                 <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation" menu-title-theme="theme5">{{ _i('General') }}</div>
-             
+
                 @can('Login')
                 <li
                     class=" {{ request()->is('admin/login/*') || request()->is('admin/login') ? 'active' : '' }}">
@@ -98,7 +98,47 @@
                     </a>
                 </li>
                 @endcan
-              
+                @can('mainPage')
+                <li
+                    class=" {{ request()->is('admin/main_page/*') || request()->is('admin/main_page') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/main_page') }}">
+                        <span class="pcoded-micon"><i class="ti-menu-alt"></i></span>
+                        <span class="pcoded-mtext" data-i18n="nav.dash.main">{{ _i('Main') }}</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                </li>
+                @endcan
+                @can('mainGoal')
+                <li
+                    class=" {{ request()->is('admin/main_goals/*') || request()->is('admin/main_goals') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/main_goals') }}">
+                        <span class="pcoded-micon"><i class="ti-menu-alt"></i></span>
+                        <span class="pcoded-mtext" data-i18n="nav.dash.main">{{ _i('Main Goals') }}</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                </li>
+                @endcan
+                @can('MainInsturcation')
+                <li
+                    class=" {{ request()->is('admin/main_insturcation/*') || request()->is('admin/main_insturcation') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/main_insturcation') }}">
+                        <span class="pcoded-micon"><i class="ti-menu-alt"></i></span>
+                        <span class="pcoded-mtext" data-i18n="nav.dash.main">{{ _i('Main Insturcation') }}</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                </li>
+                @endcan
+                @can('Help')
+                <li
+                    class=" {{ request()->is('admin/help/*') || request()->is('admin/help') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/help') }}">
+                        <span class="pcoded-micon"><i class="ti-menu-alt"></i></span>
+                        <span class="pcoded-mtext" data-i18n="nav.dash.main">{{ _i('Help') }}</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                </li>
+                @endcan
+
                 @can('Questions')
                 <li class=" {{ request()->is('admin/questions/*') || request()->is('admin/questions') ? 'active' : '' }}">
                     <a href="{{ url('/admin/questions') }}">

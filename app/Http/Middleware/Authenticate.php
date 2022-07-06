@@ -16,7 +16,8 @@ class Authenticate extends Middleware
     {
         //dd(0);
         if (str_contains(url()->current(), '/admin') || str_contains(url()->current(), '/Admin')) {
-            return 'admin/login';
+            // dd(0);
+            return 'admin/login-show';
         }else{
             return '/login';
         }
