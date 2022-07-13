@@ -1,78 +1,30 @@
 @extends('site.layout.index')
 
 @section('content')
-    @push('css')
-        <style>
-            .date {
-                color: #E5660F;
-                font-size: 14px;
-                font-weight: bold;
-                margin-top: 10px;
-            }
-        </style>
-    @endpush
-    <div class="breadcrumbs">
-        <div class="container">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ _i('Home') }} </a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ _i('About Us') }}</li>
-                </ol>
-            </nav>
+<section id="about" class="about">
+
+    <div class="container" data-aos="fade-up">
+      <div class="row gx-0">
+
+        <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+          <div class="content">
+            <h3>{{ $main_goals ? $main_goals->Data->title : '' }}</h3>
+            <p>{{ $main_goals ? $main_goals->Data->description : '' }} </p>
+            <div class="text-center text-lg-start">
+              <a href="#" class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
+                {{--  <span>Read More</span>  --}}
+                <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
         </div>
+
+        <div class="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
+          <img src="{{ asset($main_goals ? $main_goals->image : '') }}" class="img-fluid" alt="">
+        </div>
+
+      </div>
     </div>
 
-    <section class="category-page  py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="content-wrapper mt-5">
-
-                        <div class="row">
-                            @foreach ($pages as $page)
-                                @if ($page->data != null)
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="single-product-wrapper">
-                                            <a href="{{ route('site.page.show', $page->id) }}">
-                                                <img src="{{ asset($page->image) }}" alt="" class="img-fluid"
-                                                     loading="lazy">
-                                                <h3 class="product-title">{{ $page->data->title }}</h3>
-                                            </a>
-                                            <div class=" date">{{ date('d-m-Y', strtotime($page->created_at)) }}</div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-
-{{--    <section class="jobs-page  py-5">--}}
-{{--        <div class="container">--}}
-{{--            <div class="row">--}}
-{{--                @foreach ($pages as $page)--}}
-{{--                    @if ($page->data != null)--}}
-{{--                        <div class="col-md-6">--}}
-{{--                            <div class="single-job">--}}
-{{--                                <div class="job-info">--}}
-{{--                                    <div class="title">{{ $page->data->title }}</div>--}}
-{{--                                    <div class="date">{{ date('d-m-Y', strtotime($page->created_at)) }}</div>--}}
-
-
-{{--                                </div>--}}
-{{--                                <a href="{{ route('site.page.show', $page->id) }}" class="btn btn-orange">--}}
-{{--                                    {{ _i('More Info') }}--}}
-{{--                                </a>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    @endif--}}
-{{--                @endforeach--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </section>--}}
+  </section><!-- End About Section -->
 @endsection

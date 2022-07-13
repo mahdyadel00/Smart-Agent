@@ -34,6 +34,7 @@
                                     <tr role="row">
                                         <th class="sorting"> {{ _i('Title') }}</th>
                                         <th class="sorting"> {{ _i('Answer') }}</th>
+                                        <th class="sorting"> {{ _i('Select') }}</th>
                                         <th class="sorting"> {{ _i('published') }}</th>
                                         <th class="sorting"> {{ _i('Controll') }}</th>
                                     </tr>
@@ -127,6 +128,10 @@
                     {
                         data: 'answer',
                         name: 'answer'
+                    },
+                    {
+                        data: 'select',
+                        name: 'select'
                     },
                     {
                         data: 'published',

@@ -18,6 +18,8 @@ use App\Modules\Admin\Controllers\Instructions\InstructionsController;
 use App\Modules\Admin\Controllers\Settings\SettingsController;
 use App\Modules\Admin\Controllers\Permissions\PermissionsController;
 use App\Modules\Admin\Controllers\Questions\QuestiontController;
+use App\Modules\Admin\Controllers\Questions\QuestionDetailsController;
+use App\Modules\Admin\Controllers\Questions\QuestionSelectController;
 use App\Modules\Admin\Controllers\QuizModule\QuizeModuleController;
 use App\Modules\Admin\Controllers\ActivityModules\ActivityModulesController;
 use App\Modules\Admin\Controllers\Login\LoginController;
@@ -103,6 +105,24 @@ Route::prefix('admin')->group(function () {
         Route::get('questions/get_translation', [QuestiontController::class, 'getTranslation'])->name('questions.get.translation');
         Route::post('questions/store_translation', [QuestiontController::class, 'storeTranslation'])->name('questions.store.translation');
         Route::get('questions/{delete}', [QuestiontController::class, 'delete'])->name('questions.delete');
+
+        //Question Details
+
+        Route::get('question_details' , [QuestionDetailsController::class , 'index'])->name('question_details.index');
+        Route::get('question_details/create' , [QuestionDetailsController::class , 'create'])->name('question_details.create');
+        Route::post('question_details/store' , [QuestionDetailsController::class , 'store'])->name('question_details.store');
+        Route::get('question_details/{question_details}/edit' , [QuestionDetailsController::class , 'edit'])->name('question_details.edit');
+        Route::post('question_details/{id}/update' , [QuestionDetailsController::class , 'update'])->name('question_details.update');
+        Route::get('question_details/{delete}' , [QuestionDetailsController::class , 'delete'])->name('question_details.delete');
+
+        //Question Select
+
+        Route::get('question_select' , [QuestionSelectController::class , 'index'])->name('question_select.index');
+        Route::get('question_select/create' , [QuestionSelectController::class , 'create'])->name('question_select.create');
+        Route::post('question_select/store' , [QuestionSelectController::class , 'store'])->name('question_select.store');
+        Route::get('question_select/{question_select}/edit' , [QuestionSelectController::class , 'edit'])->name('question_select.edit');
+        Route::post('question_select/{id}/update' , [QuestionSelectController::class , 'update'])->name('question_select.update');
+        Route::get('question_select/{delete}' , [QuestionSelectController::class , 'delete'])->name('question_select.delete');
 
         //Quiz After module
         Route::get('quiz_module', [QuizeModuleController::class, 'index'])->name('quiz_module.index');

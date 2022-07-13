@@ -6,8 +6,12 @@ use App\Bll\Lang;
 use App\Bll\Utility;
 use App\Models\Language;
 use Illuminate\Http\Request;
+use App\Modules\Admin\Models\Main\Main;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
+use App\Modules\Admin\Models\Help\Help;
+use App\Modules\Admin\Models\Main\MainGoals;
+use App\Modules\Admin\Models\Main\Insturcation;
 use Xinax\LaravelGettext\Facades\LaravelGettext;
 
 class HomeController extends Controller
@@ -15,17 +19,11 @@ class HomeController extends Controller
 
     public function index(){
 
-        // $blogs = Blog::leftJoin('blogs_data','blogs_data.blog_id','blogs.id')
-        //     ->select('blogs_data.*','blogs.id','blogs.image')
-        //     ->where('blogs_data.lang_id', Lang::getSelectedLangId())->where('blogs.status', 1)
-        //     ->orderBy('blogs.id', 'desc')->take(6)->get();
-
-        
-
-        // $reviews = Comment::with('user')->where('published',1)->get();
-
-
-        return view('site.home');
+        $main = Main::with('Data')->first();
+        $main_goals = MainGoals::with('Data')->first();
+        $main_insturcation = Insturcation::with('Data')->first();
+        $help = Help::with('data')->first();
+        return view('site.home' , compact('main' , 'main_goals' , 'main_insturcation' , 'help'));
     }
 
 

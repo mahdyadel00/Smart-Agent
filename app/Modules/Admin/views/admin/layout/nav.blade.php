@@ -148,6 +148,24 @@
                     </a>
                 </li>
                 @endcan
+                @can('Question Details')
+                <li class=" {{ request()->is('admin/question_details/*') || request()->is('admin/question_details') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/question_details') }}">
+                        <span class="pcoded-micon"><i class="ti-menu-alt"></i></span>
+                        <span class="pcoded-mtext" data-i18n="nav.dash.main">{{ _i('Question Details') }}</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                </li>
+                @endcan
+                @can('Question MCQ')
+                <li class=" {{ request()->is('admin/question_select/*') || request()->is('admin/question_select') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/question_select') }}">
+                        <span class="pcoded-micon"><i class="ti-menu-alt"></i></span>
+                        <span class="pcoded-mtext" data-i18n="nav.dash.main">{{ _i('Question Select') }}</span>
+                        <span class="pcoded-mcaret"></span>
+                    </a>
+                </li>
+                @endcan
                 <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation" menu-title-theme="theme5">{{ _i('Modules') }}</div>
                 @can('Modules')
                 <li

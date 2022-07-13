@@ -14,6 +14,10 @@ class Question extends Model
     {
         return $this->hasMany(QuestionData::class , 'question_id' , 'id');
     }
+    public function questionSelect()
+    {
+        return $this->hasMany(QuestionSelect::class , 'question_mcq_id' , 'id');
+    }
 
     public function TranslatedData()
     {

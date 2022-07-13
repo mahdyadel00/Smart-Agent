@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-@if(\App\Bll\Lang::getLangCode()== "ar")
+{{--  @if(\App\Bll\Lang::getLangCode()== "ar")  --}}
     <html lang="ar" dir="rtl"><!-- Change to RTL in Arabic version -->
-@else
-    <html lang="en" dir="ltr">
-@endif
+{{--  @else  --}}
+    {{--  <html lang="en" dir="ltr">  --}}
+{{--  @endif  --}}
 
 @php
     $settings = \App\Bll\Site::getSettings();
@@ -16,7 +16,10 @@
 
 @include('site.layout.nav')
 
-@yield('content')
+<section>
+
+    @yield('content')
+</section>
 
 @include('site.layout.footer' ,['settings' => $settings ])
 

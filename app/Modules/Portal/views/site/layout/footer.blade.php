@@ -1,53 +1,68 @@
-{{-- @dd($site_settings) --}}
-<footer>
-    <div class="footer-wrapper  ">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3  col-md-6">
-                    <div>
-                        <img alt="" class="img-fluid" loading="lazy"
-                            src="@if ($images->footer != null) {{ asset($images->footer) }} @else {{ asset('site/images/Logo.webp') }} @endif">
-                    </div>
-                    <p class="footer-brief my-2 lh-lg">{{ $site_settings['description'] }}</p>
-                    <ul class="list-inline social-list mt-3">
-                        <li class="list-inline-item"><a href="{{ $site_settings['facebook_url'] }}"><i
-                                    class="fab fa-facebook"></i></a></li>
-                        <li class="list-inline-item"><a href="{{ $site_settings['twitter_url'] }}"><i
-                                    class="fab fa-twitter"></i></a></li>
-                        <li class="list-inline-item"><a href="{{ $site_settings['youtube_url'] }}"><i
-                                    class="fab fa-youtube"></i></a></li>
-                        <li class="list-inline-item"><a href="{{ $site_settings['instagram_url'] }}"><i
-                                    class="fab fa-instagram"></i></a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-4 row">
-                    <div class="">
-                        {{-- <h6>Company</h6> --}}
-                        <ul class="list-unstyled footer-nav">
-                                <li><a href="#"></a>
-                                </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h6>{{_i('Subscribe')}}</h6>
-                    <p>{{_i('Subscribe to the newsletter to receive our offers and all new')}}.</p>
-                    <form class="subscribe-form" id="subscribeForm" data-validate="parsley">
-                        <input type="email" placeholder="{{ _i('Your Email Address') }}" class="form-control"
-                            data-parsley-type="email">
-                        {{-- <button type="submit"  class='subscribe-btn'>{{ _i('Subscribe') }}</button> --}}
-                        <input type="submit" class="btn-submit btn btn-green-secondary subscribe-btn" value="Subscribe">
-                    </form>
-                </div>
+
+<footer id="footer" class="footer">
+
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-5 col-md-12 footer-info">
+            <a href="index.html" class="logo d-flex align-items-center">
+              <img src="{{ asset('site') }}/img/logo.png" alt="">
+              <span>{{ $site_settings->title }}</span>
+            </a>
+            <p{{ $site_settings->description }}</p>
+            <div class="social-links mt-3">
+              <a href="{{ $site_settings->twitter_url }}" class="twitter"><i class="bi bi-twitter"></i></a>
+              <a href="{{ $site_settings->facebook_url }}" class="facebook"><i class="bi bi-facebook"></i></a>
+              <a href="{{ $site_settings->instagram_url }}" class="instagram"><i class="bi bi-instagram"></i></a>
+              <a href="{{ $site_settings->mail_url }}" class="email"><i class="bi bi-envelope"></i></a>
             </div>
+          </div>
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bi bi-chevron-right"></i> <a href="{{ route('home') }}">{{ _i('Home') }}</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="#about">{{ _i('Main Goals') }}</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="#services">{{ _i('Main Insturcation') }}</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="#portfolio">{{ _i('Help') }}</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="{{ route('contact') }}">{{ _i('Contact Us') }}</a></li>
+            </ul>
+          </div>
+
+
+
+          <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+            <h4>{{ _I('Contact Us') }}</h4>
+            <p>
+              A108 Adam Street <br>
+              New York, NY 535022<br>
+              United States <br><br>
+              <strong>Phone:</strong>{{ $site_settings->phone1 }}<br>
+              <strong>Email:</strong>{{ $site_settings->email }}<br>
+            </p>
+
+          </div>
+
         </div>
-        <div class="copyrights">
-            <div class="container">
-                <div class="d-md-flex justify-content-between">
-                    <p class="cp"><a href="http://www.serv5.com" target="_blank">Serv5.com </a></p>
-                    <p>{{ _i('Copyright') }} © {{ date('Y') }}. {{ _i('All rights reserved') }}.</p>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-</footer>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>{{ _i('Smart Agent') }}</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/flexstart-bootstrap-startup-template/ -->
+        Maded By <a href="https://bootstrapmade.com/">Mahdy Adel</a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+</body>
+
+</html>
+
+  {{--  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>  --}}

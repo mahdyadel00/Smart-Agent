@@ -22,7 +22,9 @@ class QuestiontController extends Controller
 
                 $query->where('lang_id' , Lang::getSelectedLangId());
             },
+            'questionSelect',
             ])->get();
+            dd($questions);
         if (request()->ajax()) {
             return DataTables::of($questions)
                 ->editColumn('options', function ($query) {
@@ -55,9 +57,9 @@ class QuestiontController extends Controller
                     }
 
                     return $html;
-          
+
              })->editColumn('title', function ($query) {
-                
+
                 $data = $query->data->where('lang_id', Lang::getSelectedLangId())->first();
                 if ($data != null) {
 
@@ -65,11 +67,16 @@ class QuestiontController extends Controller
                 } else {
                     $data = $query->data->first();
                     return $data->title;
-                }         
+                }
                })->editColumn('answer', function($query) {
-               
+
                 return $query->data->isNotEmpty() ? $query->data->first()->answer : '' == 1 ? _i('True') : _i('False');
-           
+
+               })->editColumn('select', function($query) {
+
+                dd($query->questionSelect);
+                return $query->questionSelect->isNotEmpty() ? $query->questionSelect->first()->title : '';
+
             })->editColumn('published', function($query) {
                 return $query->published == 1 ? _i('Published') : _i('Not Published');
 
@@ -105,9 +112,9 @@ class QuestiontController extends Controller
     {
         $questions = Question::create([
             'published' => $request->published ?? 0,
-           
+
         ]);
-        
+
         $questions_data = QuestionData::create([
             'question_id' => $questions->id,
             'title' => $request->title,
@@ -118,7 +125,7 @@ class QuestiontController extends Controller
         $questions->save();
 
         return redirect()->back()->with('flash_message', _i('Added Successfully !'));
-        
+
     }
 
     protected function edit($id)
@@ -130,26 +137,26 @@ class QuestiontController extends Controller
 
     protected function update(Request $request, $id)
     {
-        
+
         $question = Question::where("id", $id)->first();
 
         if ($request->has('published')) {
 
             $question->published = $request->published;
         } else {
-            
+
             $question->published = 0;
         }
 
         $question_data = QuestionData::where('question_id', $question->id)->first();
-       
+
         // dd($request->answer);
         if ($request->has('answer')) {
 
             $question_data->answer = $request->answer == 1;
         } else {
             $question_data->answer = 0;
-        }       
+        }
 
         $question->save();
         $question_data->save();

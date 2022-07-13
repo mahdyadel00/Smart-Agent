@@ -111,7 +111,7 @@ class MainGoalsController extends Controller
 
         ]);
 
-        $main_data = MainGoalsData::create([
+             MainGoalsData::create([
             'main_goal_id' => $main_goals->id,
             'title' => $request->title,
             'description' => $request->description,
