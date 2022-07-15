@@ -393,7 +393,7 @@
 
 
 
-  </main
+  </main>
 
 
 @endsection

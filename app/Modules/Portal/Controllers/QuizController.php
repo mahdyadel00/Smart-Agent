@@ -16,7 +16,7 @@ class QuizController extends Controller
     protected function index()
     {
         $question_details = QuestionDetails::first();
-        $questions = Question::with('data')->paginate(1);
+        $questions = Question::with('data')->get();
 
         return view('site.questions.index', compact('questions', 'question_details'));
     }

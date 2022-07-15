@@ -22,7 +22,6 @@
 
 @stack('js')  --}}
 
-
 <script src="{{ asset('site') }}/vendor/purecounter/purecounter.js"></script>
 <script src="{{ asset('site') }}/vendor/aos/aos.js"></script>
 <script src="{{ asset('site') }}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -33,3 +32,6 @@
 {{--  @include('site.includes.js')  --}}
 <!-- Template Main JS File -->
 <script src="{{ asset('site') }}/js/main.js"></script>
+
+<script src="{{ asset('site') }}/jquery-3.6.0.min.js"></script>
+

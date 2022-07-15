@@ -25,6 +25,8 @@
 
 @include('site.includes.script')
 
+@stack('js')
+
 </body>
 
 </html>
