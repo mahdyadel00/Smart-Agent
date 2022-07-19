@@ -24,7 +24,7 @@ class QuizController extends Controller
     protected function store(Request $request)
     {
 
-        // dd($request->all());
+//         dd($request->all());
         // if ($request->has('published')) {
 
         //     $question->published = $request->published;

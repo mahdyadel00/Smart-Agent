@@ -51,7 +51,7 @@
                             @endforeach
 
                                 <div class="col-md-12 text-center">
-                                    <button class="btn btn-primary next" style="float:left">{{ _i('Next') }}</button>
+                                    <button class="btn btn-primary next" type="submit" style="float:left">{{ _i('Next') }}</button>
                                     <button class="btn btn-primary prev" style="float:right">{{ _i('Previous') }}</button>
                                 </div>
 
@@ -76,8 +76,8 @@
 
             $question_shown = $('.question').first().show();
 
-            $('.next').click(function (e) {
-                e.preventDefault()
+            $('.next').click(function () {
+                // e.preventDefault()
                 $('.question').hide()
                 $question_shown = $question_shown.next().show();
 
